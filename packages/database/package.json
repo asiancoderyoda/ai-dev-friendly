@@ -1,0 +1,15 @@
+{
+  "name": "@letscode-dev-friendly/database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Avigyan Bhakta",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@letscode-dev-friendly/shared": "*",
+    "pg": "^8.20.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.28"
+  }
+}

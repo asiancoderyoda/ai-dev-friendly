@@ -1,0 +1,13 @@
+{
+  "name": "@letscode-dev-friendly/bitbucket",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Avigyan Bhakta",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@letscode-dev-friendly/shared": "*",
+    "simple-git": "^3.36.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@letscode-dev-friendly/indexing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Avigyan Bhakta",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@letscode-dev-friendly/shared": "*",
+    "ts-morph": "^28.0.0"
+  }
+}
