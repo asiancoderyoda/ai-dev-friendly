@@ -1,0 +1,1 @@
+export { default as EmbeddingService } from './embedding.service';

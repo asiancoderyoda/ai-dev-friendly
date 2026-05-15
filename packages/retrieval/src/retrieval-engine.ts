@@ -1,8 +1,13 @@
 import { IndexedSymbol } from "@letscode-dev-friendly/shared";
+import { SemanticSearch } from "@letscode-dev-friendly/vector";
 
 
 class RetrievalEngine {
-  constructor() {}
+  private _semanticSearch: SemanticSearch;
+
+  constructor(semanticSearch: SemanticSearch = new SemanticSearch()) {
+    this._semanticSearch = semanticSearch;
+  }
 
   retrieveRelevantFilesUnscored(query: string, symbols: IndexedSymbol[]): IndexedSymbol[] {
     const queryFormatted = query.toLowerCase();
@@ -36,6 +41,20 @@ class RetrievalEngine {
 
     scoredSymbols.sort((a, b) => b.score - a.score);
     return scoredSymbols.filter(s => s.score > 0).map(s => s.symbol);
+  }
+
+  async hybridRetrieve(query: string, symbols: IndexedSymbol[], topK: number = 10) {
+    try {
+      const keywordResults = this.retrieveRelevantFiles(query, symbols);
+      const semanticResults = await this._semanticSearch.search(query, 10)
+      return {
+        keywordResults,
+        semanticResults
+      }
+    } catch (e) {
+      console.error("Error occurred while hybrid retrieving:", e);
+      throw e;
+    }
   }
 }
 

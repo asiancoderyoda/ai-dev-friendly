@@ -1,0 +1,23 @@
+{
+  "name": "@letscode-dev-friendly/agents",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "Avigyan Bhakta",
+  "main": "./index.ts",
+  "dependencies": {
+    "@langchain/core": "^1.1.46",
+    "@langchain/langgraph": "^1.3.0",
+    "@langchain/openai": "^1.4.5",
+    "@letscode-dev-friendly/embeddings": "*",
+    "@letscode-dev-friendly/retrieval": "*",
+    "@letscode-dev-friendly/shared": "*",
+    "@qdrant/js-client-rest": "^1.18.0",
+    "diff": "^9.0.0",
+    "openai": "^6.37.0"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2"
+  }
+}

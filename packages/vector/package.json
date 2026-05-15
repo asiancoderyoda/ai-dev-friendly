@@ -1,5 +1,5 @@
 {
-  "name": "@letscode-dev-friendly/indexing",
+  "name": "@letscode-dev-friendly/vector",
   "version": "1.0.0",
   "private": true,
   "description": "",
@@ -8,7 +8,8 @@
   "main": "./index.ts",
   "dependencies": {
     "@letscode-dev-friendly/shared": "*",
-    "ts-morph": "^28.0.0",
+    "@letscode-dev-friendly/embeddings": "*",
+    "@qdrant/js-client-rest": "^1.18.0",
     "openai": "^6.37.0"
   }
 }

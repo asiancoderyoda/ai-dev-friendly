@@ -26,6 +26,9 @@ const RedisConfig = {
     const n = raw ? parseInt(raw, 10) : 6379;
     return Number.isFinite(n) ? n : 6379;
   },
+  get password(): string {
+    return process.env.REDIS_PASSWORD?.trim() || '';
+  }
 };
 
 
@@ -47,9 +50,58 @@ const BitbucketConfig = {
   },
 };
 
+const OpenAIConfig = {
+  get apiKey(): string {
+    return required('OPENAI_API_KEY');
+  },
+  get baseURL(): string {
+    return required('OPENAI_BASE_URL');
+  },
+  get embeddingModel(): string {
+    return process.env.OPENAI_EMBEDDING_MODEL?.trim() || 'text-embedding-3-small';
+  },
+  get chatModel(): string {
+    return process.env.OPENAI_CHAT_MODEL?.trim() || 'gpt-40-mini';
+  }
+}
+
+const QdrantConfig = {
+  get url(): string {
+    return required('QDRANT_URL');
+  },
+  get apiKey(): string {
+    return required('QDRANT_API_KEY');
+  },
+}
+
+const GitRemoteConfig = {
+  get remote_base_url(): string {
+    return required('GIT_REMOTE_BASE_URL');
+  },
+  get username(): string {
+    return required('GIT_REMOTE_USERNAME');
+  },
+  get email(): string {
+    return required('GIT_REMOTE_EMAIL');
+  },
+  get password(): string {
+    return required('GIT_REMOTE_PASSWORD');
+  }
+}
+
+const QueueConfig = {
+  get defaultQueueName(): string {
+    return process.env.DEFAULT_QUEUE_NAME?.trim() || "workflow-queue";
+  }
+}
+
 export {
   DatabaseConfig,
   RedisConfig,
   getRepoBasePath,
   BitbucketConfig,
+  OpenAIConfig,
+  QdrantConfig,
+  GitRemoteConfig,
+  QueueConfig
 };

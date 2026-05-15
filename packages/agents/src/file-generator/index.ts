@@ -1,0 +1,1 @@
+export { default as FileGeneratorAgent } from "./file-generator.agent";
