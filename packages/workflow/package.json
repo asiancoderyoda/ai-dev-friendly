@@ -7,10 +7,11 @@
   "author": "Avigyan Bhakta",
   "main": "./index.ts",
   "dependencies": {
-    "@letscode-dev-friendly/shared": "*",
     "@letscode-dev-friendly/agents": "*",
     "@letscode-dev-friendly/indexing": "*",
+    "@letscode-dev-friendly/shared": "*",
     "@letscode-dev-friendly/validation": "*",
-    "axios": "^1.16.1"
+    "axios": "^1.16.1",
+    "simple-git": "^3.36.0"
   }
 }

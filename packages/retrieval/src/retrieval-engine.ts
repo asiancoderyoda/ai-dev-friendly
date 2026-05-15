@@ -2,13 +2,16 @@ import fs from "fs";
 import { RepositoryIndexer } from "@letscode-dev-friendly/indexing";
 import { IndexedSymbol } from "@letscode-dev-friendly/shared";
 import { SemanticSearch } from "@letscode-dev-friendly/vector";
+import { DatabaseService, Symbol } from "@letscode-dev-friendly/database";
 class RetrievalEngine {
   private _indexer: RepositoryIndexer;
   private _semanticSearch: SemanticSearch;
+  private _db: DatabaseService;
 
   constructor(repoPath: string, semanticSearch: SemanticSearch = new SemanticSearch()) {
     this._semanticSearch = semanticSearch;
     this._indexer = new RepositoryIndexer(repoPath);
+    this._db = new DatabaseService();
   }
 
   retrieveRelevantFilesUnscored(query: string, symbols: IndexedSymbol[]): IndexedSymbol[] {
@@ -45,20 +48,6 @@ class RetrievalEngine {
     return scoredSymbols.filter(s => s.score > 0).map(s => s.symbol);
   }
 
-  async hybridRetrieve(query: string, symbols: IndexedSymbol[], topK: number = 10) {
-    try {
-      const keywordResults = this.retrieveRelevantFiles(query, symbols);
-      const semanticResults = await this._semanticSearch.search(query, 10)
-      return {
-        keywordResults,
-        semanticResults
-      }
-    } catch (e) {
-      console.error("Error occurred while hybrid retrieving:", e);
-      throw e;
-    }
-  }
-
   async retrieveContext(repoPath: string, query: string) {
     try {
       const symbols = this._indexer.indexRepository();
@@ -91,6 +80,43 @@ class RetrievalEngine {
       };
     } catch (e) {
       console.error("Error occurred while retrieving context:", e);
+      throw e;
+    }
+  }
+
+  async hybridRetrieve(query: string, topK: number = 10) {
+    try {
+      const db = await this._db.initialize();
+      const symbolEntityRepository = db.getRepository(Symbol);
+      const keywordResults = await symbolEntityRepository.createQueryBuilder("symbol")
+        .where("LOWER(symbol.name) LIKE LOWER(:query) OR LOWER(symbol.filePath) LIKE LOWER(:query)", { query: `%${query}%` })
+        .orWhere("LOWER(symbol.summary) LIKE LOWER(:query)", { query: `%${query}%` })
+        .limit(topK)
+        .getMany();
+      const semanticResults = await this._semanticSearch.search(query, topK);
+      return {
+        keywordResults,
+        semanticResults
+      }
+    } catch (e) {
+      console.error("Error occurred while hybrid retrieving:", e);
+      throw e;
+    }
+  }
+
+  async retrieveContextWithHybridApproach(repoPath: string, query: string) {
+    try {
+      const { keywordResults, semanticResults } = await this.hybridRetrieve(query, 10);
+      const relevantFiles = [...new Set([...keywordResults, ...semanticResults])]
+      return {
+        relevantFiles,
+        architecturalPatterns: relevantFiles.map((r: any) => r.filePath),
+        relatedTests: [],
+        similarImplementations: [],
+      }
+
+    } catch (e) {
+      console.error("Error occurred while retrieving context with hybrid approach:", e);
       throw e;
     }
   }

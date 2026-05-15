@@ -1,20 +1,19 @@
-TODO
-
 - Semantic Embedding
 - Dependency Traversal
 - Postgres integration
-- Vector DB integration (To)
+- Vector DB integration
 - Hybrid Retrieval
 - Incremental Indexing
 - git diff awareness
 - Patch Generator
 - Scoped file modification
-- Planning Agent (with debate planner) for ticket classification, impact module/file prediction
+- Planning Agent (TODO - with debate planner) for ticket classification, impact module/file prediction
 - Coding Agent
-- Coverage Agent
+- Coverage Agent (TODO)
 - Reviewer Agent
 - Langgraph Orchastration
-- Langsmith Tracing
+- Langsmith Tracing (TODO)
+- Feedback Loop (TODO)
 
 RUN THE SYSTEM
 Terminal 1:

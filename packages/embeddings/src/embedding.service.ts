@@ -7,7 +7,7 @@ class EmbeddingService {
     constructor() {
         this.openAIClient = new OpenAI({
             apiKey: OpenAIConfig.apiKey,
-            baseURL: OpenAIConfig.baseURL,
+            // baseURL: OpenAIConfig.baseURL,
         });
     }
 

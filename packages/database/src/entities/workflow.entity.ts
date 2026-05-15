@@ -8,22 +8,22 @@ import {
 @Entity()
 export class Workflow {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  status: string;
+  status!: string;
 
   @Column("text")
-  ticket: string;
+  ticket!: string;
 
   @Column()
-  repoSlug: string;
+  repoSlug!: string;
 
   @Column()
-  repoPath: string;
+  repoPath!: string;
 
   @Column()
-  currentStep: string;
+  currentStep!: string;
 
   @Column({ nullable: true })
   branchName?: string;
@@ -32,5 +32,5 @@ export class Workflow {
   prUrl?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

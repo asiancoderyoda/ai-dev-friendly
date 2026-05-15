@@ -6,6 +6,7 @@ import GitWorkflowService from "./git.service";
 import PullRequestService from "./pr.service";
 import OperationGraphExecutor from "./operation-graph.executor";
 import GitDiffViewer from "./git-diff-viewer";
+import { DatabaseService, Workflow } from "@letscode-dev-friendly/database";
 
 class WorkflowService {
     private _repositoryPath: string;
@@ -22,6 +23,7 @@ class WorkflowService {
     private _gitWorkflowService: GitWorkflowService;
     private _pullRequestService: PullRequestService;
     private _operationGraphExecutor: OperationGraphExecutor;
+    private _db: DatabaseService;
 
     constructor(repositoryPath: string) {
         this._repositoryPath = repositoryPath;
@@ -38,6 +40,7 @@ class WorkflowService {
         this._gitDiffViewer = new GitDiffViewer();
         this._pullRequestService = new PullRequestService();
         this._operationGraphExecutor = new OperationGraphExecutor();
+        this._db = new DatabaseService();
     }
 
     async executeWorkflow(ticketDescription: string) {
@@ -77,7 +80,7 @@ class WorkflowService {
             console.log("------------------------------------------------------------------------------");
 
             console.log("STEP 3: Context Retrieval");
-            const context = await this._retrievalEngine.retrieveContext(this._repositoryPath, ticketDescription);
+            const context = await this._retrievalEngine.retrieveContextWithHybridApproach(this._repositoryPath, ticketDescription);
             console.log("Retrieved Context:");
             console.log(context);
             console.log("------------------------------------------------------------------------------");
@@ -142,6 +145,16 @@ class WorkflowService {
             console.log("Pull request created successfully.");
         } catch (e) {
             console.error("Error executing workflow:", e);
+            throw e;
+        }
+    }
+
+    async emitWorkflowEvents(ticket: string, currentStep: string, nextStep: string) {
+        try {
+            const db = await this._db.initialize();
+            const workflowEntityRepository = db.getRepository(Workflow);
+        } catch (e) {
+            console.error("Error emitting workflow events:", e);
             throw e;
         }
     }

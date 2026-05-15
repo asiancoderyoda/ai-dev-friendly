@@ -3,23 +3,32 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Symbol {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    name: string;
-    
-    @Column()
-    type: string;
+    name!: string;
 
     @Column()
-    filePath: string;
+    repoName!: string;
+
+    @Column()
+    type!: string;
+
+    @Column()
+    filePath!: string;
+
+    @Column('text')
+    summary!: string;
 
     @Column("simple-array")
-    imports: string[];
+    imports!: string[];
 
     @Column("simple-array")
-    exports: string[];
+    exports!: string[];
 
     @Column("simple-array", { nullable: true })
     methods?: string[];
+
+    @Column({ nullable: true })
+    vectorId?: string;
 }

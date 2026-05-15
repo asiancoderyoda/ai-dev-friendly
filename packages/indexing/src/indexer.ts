@@ -5,7 +5,7 @@ class RepositoryIndexer {
     private project: Project;
     constructor(repositoryPath: string) {
         this.project = new Project({
-            tsConfigFilePath: `${repositoryPath}/tsconfig.json`
+            tsConfigFilePath: `${repositoryPath}/tsconfig.json`,
         });
     }
 
@@ -23,7 +23,7 @@ class RepositoryIndexer {
                     type: 'class',
                     filePath: file.getFilePath(),
                     imports,
-                    exports
+                    exports,
                 });
             });
             functions.forEach(func => {
@@ -32,7 +32,7 @@ class RepositoryIndexer {
                     type: 'function',
                     filePath: file.getFilePath(),
                     imports,
-                    exports
+                    exports,
                 });
             });
         });

@@ -4,3 +4,4 @@ export { default as FileSummarizer } from './summarizer';
 export { default as TestMapper } from './test-mapper';
 export { default as GitDiffService } from './git-diff.service';
 export { default as IncrementalIndexer } from './incremental-indexer';
+export { default as IndexingPipelineService } from './indexing-pipeline.service';

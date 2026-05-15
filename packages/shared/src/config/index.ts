@@ -38,6 +38,14 @@ const getRepoBasePath = (): string => {
   return path.isAbsolute(base) ? base : path.resolve(process.cwd(), base);
 }
 
+const getRepoRemoteURL = (): string => {
+  return required('REPOSITORY_URL');
+}
+
+const getRepoSlug = (): string => {
+  return required('REPOSITORY_SLUG');
+}
+
 const OpenAIConfig = {
   get apiKey(): string {
     return required('OPENAI_API_KEY');
@@ -87,6 +95,8 @@ export {
   DatabaseConfig,
   RedisConfig,
   getRepoBasePath,
+  getRepoRemoteURL,
+  getRepoSlug,
   OpenAIConfig,
   QdrantConfig,
   GitRemoteConfig,
