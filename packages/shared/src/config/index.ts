@@ -38,18 +38,6 @@ const getRepoBasePath = (): string => {
   return path.isAbsolute(base) ? base : path.resolve(process.cwd(), base);
 }
 
-const BitbucketConfig = {
-  get username(): string {
-    return process.env.BITBUCKET_USERNAME?.trim() ?? "";
-  },
-  get appPassword(): string {
-    return process.env.BITBUCKET_APP_PASSWORD?.trim() ?? "";
-  },
-  get workspace(): string {
-    return process.env.BITBUCKET_WORKSPACE?.trim() ?? "";
-  },
-};
-
 const OpenAIConfig = {
   get apiKey(): string {
     return required('OPENAI_API_KEY');
@@ -99,7 +87,6 @@ export {
   DatabaseConfig,
   RedisConfig,
   getRepoBasePath,
-  BitbucketConfig,
   OpenAIConfig,
   QdrantConfig,
   GitRemoteConfig,
