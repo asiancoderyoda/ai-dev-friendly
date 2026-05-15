@@ -4,7 +4,7 @@ import { IndexingPipelineService } from "@letscode-dev-friendly/indexing";
 import { getRepoBasePath, getRepoSlug } from "@letscode-dev-friendly/shared";
 import path from "path";
 
-const run = async () => {
+export const runIndexingPipeline = async () => {
   try {
     console.log("Starting indexing pipeline...", getRepoBasePath());
     const repoBasePath = getRepoBasePath();
@@ -16,8 +16,3 @@ const run = async () => {
     throw e;
   }
 };
-
-run().catch((err) => {
-  console.error("Error in indexing pipeline execution:", err);
-  process.exit(1);
-});

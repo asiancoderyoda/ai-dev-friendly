@@ -11,6 +11,8 @@ class RepositoryIndexer {
 
     public indexRepository() {
         const sourceFiles = this.project.getSourceFiles();
+        console.log(`Indexing ${sourceFiles.length} source files...`);
+        console.log(sourceFiles);
         const symbols: IndexedSymbol[] = [];
         sourceFiles.forEach(file => {
             const imports = file.getImportDeclarations().map(imp => imp.getModuleSpecifierValue());

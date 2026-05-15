@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { config as loadEnv } from 'dotenv';
 import { enqueueTask } from '@letscode-dev-friendly/queue';
+import { getRepoSlug } from '@letscode-dev-friendly/shared';
 
 const repoRoot = path.resolve(__dirname, '../..');
 
@@ -13,11 +14,13 @@ const run = async () => {
     'utf-8',
   );
 
+  console.log('Enqueuing task for ticket FEATURE-001...', ticket);
+
   await enqueueTask(
     'FEATURE-001',
     ticket,
-    'repo-slug',
-    path.join(repoRoot, 'repositories', 'repo-slug'),
+    getRepoSlug(),
+    path.join(repoRoot, 'repositories', getRepoSlug()),
   );
 };
 
