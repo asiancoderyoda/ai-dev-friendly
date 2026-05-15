@@ -15,3 +15,9 @@ TODO
 - Reviewer Agent
 - Langgraph Orchastration
 - Langsmith Tracing
+
+RUN THE SYSTEM
+Terminal 1:
+npx ts-node packages/queue/src/worker.ts
+Terminal 2:
+npx ts-node packages/queue/src/enqueue.ts

@@ -1,12 +1,14 @@
+import fs from "fs";
+import { RepositoryIndexer } from "@letscode-dev-friendly/indexing";
 import { IndexedSymbol } from "@letscode-dev-friendly/shared";
 import { SemanticSearch } from "@letscode-dev-friendly/vector";
-
-
 class RetrievalEngine {
+  private _indexer: RepositoryIndexer;
   private _semanticSearch: SemanticSearch;
 
-  constructor(semanticSearch: SemanticSearch = new SemanticSearch()) {
+  constructor(repoPath: string, semanticSearch: SemanticSearch = new SemanticSearch()) {
     this._semanticSearch = semanticSearch;
+    this._indexer = new RepositoryIndexer(repoPath);
   }
 
   retrieveRelevantFilesUnscored(query: string, symbols: IndexedSymbol[]): IndexedSymbol[] {
@@ -53,6 +55,42 @@ class RetrievalEngine {
       }
     } catch (e) {
       console.error("Error occurred while hybrid retrieving:", e);
+      throw e;
+    }
+  }
+
+  async retrieveContext(repoPath: string, query: string) {
+    try {
+      const symbols = this._indexer.indexRepository();
+      const results = this.retrieveRelevantFiles(query, symbols);
+      const relevantFiles =
+        results
+          .slice(0, 5)
+          .map((r: any) => {
+            const filePath =
+              r.symbol.filePath;
+
+            return {
+              path: filePath,
+              content:
+                fs.readFileSync(
+                  filePath,
+                  'utf-8',
+                ),
+            };
+          });
+
+      return {
+        relevantFiles,
+        architecturalPatterns:
+          relevantFiles.map(
+            (f: any) => f.path,
+          ),
+        relatedTests: [],
+        similarImplementations: [],
+      };
+    } catch (e) {
+      console.error("Error occurred while retrieving context:", e);
       throw e;
     }
   }

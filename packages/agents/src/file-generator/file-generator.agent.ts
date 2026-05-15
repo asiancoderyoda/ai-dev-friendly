@@ -4,12 +4,16 @@ import { llm } from "../shared/llm";
 import { getFileGenerationPrompt } from "./file-generator.prompt";
 
 class FileGeneratorAgent {
-  async generateFile(operation: any, repoPath: string, taskDescription: string) {
+  async generateFile(operation: any, repoPath: string, taskDescription: string, context: any) {
     try {
-      const prompt = getFileGenerationPrompt(taskDescription, operation);
+      const prompt = getFileGenerationPrompt(taskDescription, operation, context);
       const response = await this._callLLM(prompt);
       console.log("FileGeneratorAgent:", response);
-      const fullPath = `${repoPath}/${response.filePath}`;
+      const fullPath =
+      path.join(
+        repoPath,
+        operation.path,
+      );
       fs.mkdirSync(path.dirname(fullPath), { recursive: true });
       fs.writeFileSync(fullPath, response.content as string, "utf-8");
       return fullPath;

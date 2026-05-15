@@ -1,4 +1,4 @@
-import {Project} from "ts-morph";
+import { Project } from "ts-morph";
 
 class ASTValidator {
     validateFile(filePath: string): boolean {

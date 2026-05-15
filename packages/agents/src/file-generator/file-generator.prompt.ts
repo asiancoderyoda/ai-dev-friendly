@@ -1,4 +1,4 @@
-const getFileGenerationPrompt = (taskDescription: string, operation: any) => {
+const getFileGenerationPrompt = (taskDescription: string, operation: any, context: any) => {
     return `
         You are a senior software engineer with extensive experience in node, typescript, javascript, and software architecture.
         
@@ -16,6 +16,7 @@ const getFileGenerationPrompt = (taskDescription: string, operation: any) => {
 
         Task Description: ${taskDescription}
         Operation: ${JSON.stringify(operation)}
+        Existing Architecture Context: ${JSON.stringify(context)}
     `;
 }
 
