@@ -1,4 +1,4 @@
-import { getPlannerPrompt } from "../prompts/planner.promt";
+import { getPlannerPrompt } from "./planner.promt";
 import { llm } from "../shared/llm";
 import { PlannerStateType } from "../state/planner.state";
 

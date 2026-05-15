@@ -6,3 +6,4 @@ export * from "./coding";
 export * from "./reviewer";
 export * from "./decomposer";
 export * from "./file-generator";
+export * from "./summarizer";

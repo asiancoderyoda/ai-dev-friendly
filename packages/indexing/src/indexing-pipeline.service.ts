@@ -30,7 +30,7 @@ class IndexingPipelineService {
             const symbols = await this._indexer.indexRepository();
 
             for (const symbol of symbols) {
-                const summary = this._fileSummarizer.summarizeFile(symbol.filePath);
+                const summary = await this._fileSummarizer.summarizeFile(symbol.filePath);
                 const embedding = await this._embeddingService.createEmbedding(summary);
                 const vectorId = crypto.randomUUID();
                 await this._vectorIndexer._saveToDatabase(vectorId, summary, embedding, {
