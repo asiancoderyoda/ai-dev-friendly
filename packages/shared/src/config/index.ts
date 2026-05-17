@@ -46,17 +46,33 @@ const getRepoSlug = (): string => {
   return required('REPOSITORY_SLUG');
 }
 
-const OpenAIConfig = {
+const getLLMProvider = (): string => {
+  return process.env.LLM_PROVIDER?.trim().toLowerCase() || 'openai';
+}
+
+const AIConfig = {
   get apiKey(): string {
+    if (getLLMProvider() === 'ollama') {
+      return ""
+    }
     return required('OPENAI_API_KEY');
   },
   get baseURL(): string {
+    if (getLLMProvider() === 'ollama') {
+      return required('OLLAMA_BASE_URL');
+    }
     return required('OPENAI_BASE_URL');
   },
   get embeddingModel(): string {
+    if (getLLMProvider() === 'ollama') {
+      return required('OLLAMA_EMBEDDING_MODEL');
+    }
     return process.env.OPENAI_EMBEDDING_MODEL?.trim() || 'text-embedding-3-small';
   },
   get chatModel(): string {
+    if (getLLMProvider() === 'ollama') {
+      return required('OLLAMA_CHAT_MODEL');
+    }
     return process.env.OPENAI_CHAT_MODEL?.trim() || 'gpt-4o-mini';
   }
 }
@@ -85,6 +101,14 @@ const GitRemoteConfig = {
   }
 }
 
+const getBranchName = (): string => {
+  return process.env.BRANCH_NAME?.trim() || `patch-${Date.now()}`;
+}
+
+const getCommitMessage = (): string => {
+  return process.env.COMMIT_MESSAGE?.trim() || `Automated patch commit at ${new Date().toISOString()}`;
+}
+
 const QueueConfig = {
   get defaultQueueName(): string {
     return process.env.DEFAULT_QUEUE_NAME?.trim() || "workflow-queue";
@@ -97,8 +121,11 @@ export {
   getRepoBasePath,
   getRepoRemoteURL,
   getRepoSlug,
-  OpenAIConfig,
+  AIConfig,
   QdrantConfig,
   GitRemoteConfig,
-  QueueConfig
+  QueueConfig,
+  getLLMProvider,
+  getBranchName,
+  getCommitMessage
 };

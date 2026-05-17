@@ -8,10 +8,10 @@ class DecomposerAgent {
     name: "decomposer_processor"
   });
 
-  async decompose(ticket: string): Promise<DecomposerResponse> {
+  async decompose(ticket: string, context: any): Promise<DecomposerResponse> {
     try {
       console.log(`[DecomposerAgent] Breaking engineering ticket down into operational DAG steps...`);
-      const prompt = getDecomposerPrompt(ticket);
+      const prompt = getDecomposerPrompt(ticket, context);
 
       const response = await this.structuredLlm.invoke(prompt);
 

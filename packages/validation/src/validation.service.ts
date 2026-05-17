@@ -2,12 +2,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import ASTValidator from "./ast-validator";
-
-export interface VerificationResult {
-    success: boolean;
-    stage: "AST" | "LINT" | "TYPECHECK";
-    errorLogs: string[];
-}
+import { VerificationResult } from "./schema/validation.interface";
 
 class ValidationService {
     private _astValidator: ASTValidator;

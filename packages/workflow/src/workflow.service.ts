@@ -1,11 +1,13 @@
 import { PlannerAgent, ReviewerAgent, DecomposerAgent } from "@letscode-dev-friendly/agents";
 import { ValidationService } from "@letscode-dev-friendly/validation";
 import { RetrievalEngine } from "@letscode-dev-friendly/retrieval";
-import GitWorkflowService from "./git.service";
-import PullRequestService from "./pr.service";
+import GitWorkflowService from "./git-workflow/git.service";
+import PullRequestService from "./git-workflow/pr.service";
 import OperationGraphExecutor from "./operation-graph.executor";
-import GitDiffViewer from "./git-diff-viewer";
+import GitDiffViewer from "./git-workflow/git-diff-viewer";
 import { DatabaseService, Workflow } from "@letscode-dev-friendly/database";
+import { agentEngineExecutor } from "./core/agent.graph";
+import { getBranchName, getCommitMessage, getRepoSlug } from "@letscode-dev-friendly/shared";
 
 class WorkflowService {
     private _repositoryPath: string;
@@ -22,7 +24,7 @@ class WorkflowService {
     private _uniqueTicketId: string;
     private _commitMessage: string;
 
-    constructor(repositoryPath: string, uniqueTicketId?: string, commitMessage?: string) {
+    constructor(repositoryPath: string, uniqueTicketId: string = getBranchName(), commitMessage: string = getCommitMessage()) {
         this._repositoryPath = repositoryPath;
         this._plannerAgent = new PlannerAgent();
         this._reviewerAgent = new ReviewerAgent();
@@ -55,7 +57,7 @@ class WorkflowService {
             console.log("------------------------------------------------------------------------------");
 
             console.log("STEP 2: Decomposition");
-            const operations = await this._decomposerAgent.decompose(ticketDescription);
+            const operations = await this._decomposerAgent.decompose(ticketDescription, null);
             console.log("Decomposed Operations:");
             console.log(operations);
             console.log("------------------------------------------------------------------------------");
@@ -130,6 +132,24 @@ class WorkflowService {
         } catch (e) {
             console.error("Error executing workflow:", e);
             throw e;
+        }
+    }
+
+    async executeGraphWorkflow(ticketDescription: string) {
+        const inputs = {
+            ticketDescription: ticketDescription,
+            repoPath: this._repositoryPath,
+            repoSlug: getRepoSlug(),
+            maxAttempts: 3 // Set maximum self-healing attempts allowed
+        };
+
+        console.log("Launching Autonomous Agent Lifecycle Engine...");
+        const finalState = await agentEngineExecutor.invoke(inputs);
+
+        if (finalState.isSuccessful) {
+            console.log("Codebase patch generated, compiled, reviewed, and deployed successfully via draft PR!");
+        } else {
+            console.error("Agent was unable to resolve the ticket demands cleanly within operational boundaries.");
         }
     }
 

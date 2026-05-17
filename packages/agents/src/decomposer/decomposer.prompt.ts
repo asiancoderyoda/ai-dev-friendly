@@ -33,7 +33,7 @@
 //     getDecomposerPrompt
 // }
 
-export const getDecomposerPrompt = (ticketDescription: string): string => {
+export const getDecomposerPrompt = (ticketDescription: string, context: any): string => {
     return `
         You are a Principal Software Architect specializing in system decomposition, topological dependency ordering, and software graph generation.
 
@@ -48,6 +48,10 @@ export const getDecomposerPrompt = (ticketDescription: string): string => {
 
         ENGINEERING TICKET TO DECOMPOSE:
         "${ticketDescription}"
+
+        RETRIEVED REPOSITORY CONTEXT & CODEBASE METADATA:
+        Use this context to identify exactly which files need modifications, which files need to be created, and how their imports depend on each other:
+        ${JSON.stringify(context, null, 2)}
 
         Analyze the target requirements and generate the structured file operations graph now.
     `;

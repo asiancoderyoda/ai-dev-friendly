@@ -75,36 +75,3 @@ The current theme of the application is light, which can cause eye strain for us
 Acceptance Criteria:
 1. A toggle switch is added to the user interface that allows users to switch between light and dark themes.
 2. The dark theme should have a consistent color scheme that is easy on the eyes, with appropriate contrast for readability.
-
-
-MAJOR REQUIRED IMPROVEMENTS
-
-1. The Missing Feedback Loop (The "Self-Healing" Loop)
-Right now, your code runs a validation check on Step 5 (AST Validation) and Step 6 (Lint + Typecheck). If it fails, your code throws a fatal error: throw new Error("Lint + Typecheck failed...").
-
-The Enhancement: AI agents rarely write perfect code on the first attempt. Instead of crashing, your workflow should pipe the linter/compiler errors back to the CodingAgent or OperationGraphExecutor along with the current file contents to auto-fix the compilation error.
-
-Give the agent 3 to 5 "healing iterations" before choosing to throw a failure.
-
-2. Context Isolation & Shared Memory
-You are passing components across multiple boundaries manually (ticketDescription, context, operations). As your system grows to support test generation or breaking changes, these method signatures will become massive and messy.
-
-The Enhancement: Implement a Stateful Workflow Context or blackboard architecture. Create a lightweight transaction object that tracks the current state of the ticket, the modified files, test execution metrics, lint strings, and past attempts.
-
-3. Step 1 and Step 2 Dependency Flaw
-In your execution sequence:
-
-Step 1: The PlannerAgent creates a plan without knowing anything about the codebase state (its retrievalResults parameter is passed as undefined).
-
-Step 3: The RetrievalEngine fetches codebase files after the plan is already set.
-
-The Enhancement: Flip this order or create a two-stage routing mechanism. The planner cannot create an accurate roadmap without evaluating what code patterns actually exist in the target domain first.
-
-4. Hardcoded Git Parameters
-In Step 9 and Step 10, you have string boundaries like "automated-patch-branch" and "repo-slug" hardcoded. If two workflows run at the same time on different tickets, they will collide on the exact same remote branch, creating severe race conditions.
-
-5. Deterministic Guardrails: Ensuring LLM output ranges (like structural patches) are validated before being applied to disk.
-
-6. Token & Budget Management: Optimizing how files are read and injected into the context window to prevent massive API bills.
-
-7. Resiliency & Self-Healing: Designing programmatic retry handlers for common code compilation problems.

@@ -1,6 +1,6 @@
 import simpleGit from "simple-git";
 import fs from "fs";
-import { EnhancedDiffResult } from "./workflow.types";
+import { EnhancedDiffResult } from "../schema/workflow.types";
 
 /**
  * Retrieves a complete git diff string including brand-new untracked source files.

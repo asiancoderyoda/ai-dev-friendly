@@ -1,25 +1,29 @@
-import OpenAI from 'openai';
-import { OpenAIConfig } from '@letscode-dev-friendly/shared';
+import { Embeddings } from "@langchain/core/embeddings";
+import { OllamaEmbeddings } from "@langchain/ollama";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { AIConfig, getLLMProvider } from "@letscode-dev-friendly/shared";
 
 class EmbeddingService {
-    private openAIClient: OpenAI;
+    private embeddingClient: Embeddings;
 
     constructor() {
-        this.openAIClient = new OpenAI({
-            apiKey: OpenAIConfig.apiKey,
-            // baseURL: OpenAIConfig.baseURL,
-        });
+        this.embeddingClient = getLLMProvider() === 'ollama'
+            ? new OllamaEmbeddings({
+                baseUrl: AIConfig.baseURL,
+                model: AIConfig.embeddingModel || 'mxbai-embed-large',
+            })
+            : new OpenAIEmbeddings({
+                apiKey: AIConfig.apiKey,
+                modelName: AIConfig.embeddingModel || 'text-embedding-3-small',
+            });
     }
 
     async createEmbedding(input: string): Promise<number[]> {
         try {
-            const response = await this.openAIClient.embeddings.create({
-                model: OpenAIConfig.embeddingModel || 'text-embedding-3-small',
-                input,
-            });
-            return response.data[0].embedding;
+            const embedding = await this.embeddingClient.embedQuery(input);
+            return embedding;
         } catch (e) {
-            console.error('Error creating embedding:', e);
+            console.error('Error occurred while creating vector embedding:', e);
             throw e;
         }
     }
