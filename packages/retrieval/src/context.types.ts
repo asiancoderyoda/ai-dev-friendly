@@ -1,12 +1,22 @@
-export interface RetrievedContext {
-  relevantFiles: {
-    path: string;
-    content: string;
-  }[];
+interface UnifiedRetrievalMatch {
+    name: string;
+    filePath: string;
+    type: string;
+    summary: string;
+    score?: number;
+}
 
-  architecturalPatterns: string[];
+interface RetrievalContextResult {
+    relevantFiles: Array<{
+        path: string;
+        content: string;
+        summary: string;
+    }>;
+    architecturalPatterns: string[];
+    relatedTests: string[];
+}
 
-  relatedTests: string[];
-
-  similarImplementations: string[];
+export type {
+    UnifiedRetrievalMatch,
+    RetrievalContextResult
 }

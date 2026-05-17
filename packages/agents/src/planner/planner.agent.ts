@@ -1,38 +1,27 @@
-import { getPlannerPrompt } from "./planner.promt";
+import { getPlannerPrompt } from "./planner.prompt";
 import { llm } from "../shared/llm";
-import { PlannerStateType } from "../state/planner.state";
+import { PlannerStateType, PlannerResponseSchema } from "./schema/planner.interface";
 
 class PlannerAgent {
-    constructor() {
+    private structuredLlm = llm.withStructuredOutput(PlannerResponseSchema, {
+        name: "planner_processor"
+    });
 
-    }
+    constructor() {}
 
     async execute(state: PlannerStateType): Promise<PlannerStateType> {
         try {
+            console.log(`[PlannerAgent] Processing planning phase...`);
             const prompt = getPlannerPrompt(state);
-            const response = await this._callLLM(prompt);
+            
+            const response = await this.structuredLlm.invoke(prompt);
+
             return {
                 ...state,
-                taskType: response.taskType,
-                affectedAreas: response.affectedAreas,
-                estimatedFiles: response.estimatedFiles,
-                requiredTests: response.requiredTests,
-                riskLevel: response.riskLevel,
-                executionPlan: response?.executionPlan || [],
-                retrievalResults: response?.retrievalResults || [],
-            }
+                ...response
+            };
         } catch (e) {
-            console.error("Error occurred while executing planner agent:", e);
-            throw e;
-        }
-    }
-
-    private async _callLLM(prompt: string) {
-        try {
-            const response = await llm.invoke(prompt);
-            const parsedResponse = JSON.parse(response.content as string);
-            return parsedResponse;
-        } catch (e) {
+            console.error("Error executing planner agent:", e);
             throw e;
         }
     }

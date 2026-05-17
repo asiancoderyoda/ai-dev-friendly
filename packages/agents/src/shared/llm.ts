@@ -6,6 +6,6 @@ export const llm = new ChatOpenAI({
     // configuration: {
     //     baseURL: OpenAIConfig.baseURL,
     // },
-    modelName: OpenAIConfig.chatModel || 'gpt-40-mini',
+    modelName: OpenAIConfig.chatModel || 'gpt-4o-mini',
     temperature: 0.1,
 })

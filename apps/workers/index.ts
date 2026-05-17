@@ -12,7 +12,7 @@ const start = async () => {
         await runIndexingPipeline();
         console.log('Indexing pipeline completed.');
     } catch (e) {
-        console.error('Error during worker initialization:', e);
+        console.error('Error during repo setup:', e);
     }
 }
 

@@ -2,7 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import { config as loadEnv } from 'dotenv';
 import { enqueueTask } from '@letscode-dev-friendly/queue';
-import { getRepoSlug } from '@letscode-dev-friendly/shared';
+import { getRepoBasePath, getRepoSlug } from '@letscode-dev-friendly/shared';
+import { WorkflowService } from '@letscode-dev-friendly/workflow';
 
 const repoRoot = path.resolve(__dirname, '../..');
 
@@ -16,12 +17,10 @@ const run = async () => {
 
   console.log('Enqueuing task for ticket FEATURE-001...', ticket);
 
-  await enqueueTask(
-    'FEATURE-001',
-    ticket,
-    getRepoSlug(),
-    path.join(repoRoot, 'repositories', getRepoSlug()),
-  );
+  const repoPath = path.join(getRepoBasePath(), getRepoSlug());
+  const workflowService = new WorkflowService(repoPath);
+  await workflowService.executeWorkflow(ticket);
+
 };
 
 run().catch((err) => {

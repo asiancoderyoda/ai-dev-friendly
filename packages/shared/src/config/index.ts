@@ -57,7 +57,7 @@ const OpenAIConfig = {
     return process.env.OPENAI_EMBEDDING_MODEL?.trim() || 'text-embedding-3-small';
   },
   get chatModel(): string {
-    return process.env.OPENAI_CHAT_MODEL?.trim() || 'gpt-40-mini';
+    return process.env.OPENAI_CHAT_MODEL?.trim() || 'gpt-4o-mini';
   }
 }
 

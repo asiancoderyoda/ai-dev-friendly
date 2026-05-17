@@ -9,13 +9,8 @@ class FileSummarizer {
     }
 
     async summarizeFile(filePath: string): Promise<string> {
-        /**
-         * This is a placeholder implementation.
-         * Later, LLM generated summarization to be implemented here, which would analyze the file content and generate a meaningful summary.
-         * We will do a embedding after LLM generates the summary and store it in the database for future retrieval and reference.
-         */
         const fileContent =  fs.readFileSync(filePath, 'utf-8');
-        const summary = await this._summarizerAgent.summarize(fileContent);
+        const summary = await this._summarizerAgent.summarize(fileContent, filePath);
         return `
             File: ${path.basename(filePath)}
             Summary: ${summary}

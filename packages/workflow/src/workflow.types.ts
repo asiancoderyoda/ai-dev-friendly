@@ -1,13 +1,13 @@
-interface WorkflowState {
-    ticket: string;
-    repoPath: string;
-    targetFile: string;
-    generatedPatch?: string;
-    reviewSummary?: string;
-    validationPassed?: boolean;
-    branchName?: string;
+interface EnhancedDiffResult {
+    rawDiff: string;
+    hasChanges: boolean;
+    stats: {
+        changedFilesCount: number;
+        insertions: number;
+        deletions: number;
+    };
 }
 
 export {
-    WorkflowState
+    EnhancedDiffResult
 }
